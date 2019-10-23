@@ -48,5 +48,7 @@ class LinkedList
             $prev = $current; // в пред. элем запишем текущий элем
             $current = $head; // в текущ элем запишем временный
         }
+
+        $this->item = $prev;
     }
 }
