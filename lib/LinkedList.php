@@ -38,37 +38,15 @@ class LinkedList
 
     public function reverse()
     {
+        $current = $this->list; // текущий элемент
+        $prev = null; // пред. элем
 
-        $currentElement = $this->list;
-        $nextElement = $currentElement->nextElement;
-        $currentElement->nextElement = null;
-
-        while ($nextElement)
+        while(!is_null($current)) // пока элемент не null
         {
-            $next = $nextElement->nextElement;
-            $nextElement->nextElement = $currentElement->nextElement;
-            $currentElement->nextElement = $nextElement;
-            $nextElement = $next;
+            $head = $current->nextElement; // временный элем. - хранит ссылку на след.элем
+            $current->nextElement = $prev; // в след. элем запишем значение из пред.
+            $prev = $current; // в пред. элем запишем текущий элем
+            $current = $head; // в текущ элем запишем временный
         }
     }
-
-    /*
-    public function reverse()
-    {
-        $currentElement = $this->list;
-        $nextElement = $currentElement->nextElement;
-        $currentElement->nextElement = null;
-
-        $this->reverseList($currentElement, $nextElement);
-    }
-
-    private function reverseList($prev, $current)
-    {
-        if( is_null($current) ) return $prev;
-
-        $next = $current->nextElement;
-        $current->nextElement = $prev;
-        return $this->reverseList($current, $next);
-    }
-    */
 }
