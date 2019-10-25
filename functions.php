@@ -1,5 +1,5 @@
 <?php
-
+// сортировка пузырьком
 function bubble_sort($array = [])
 {
     $i = 0;
@@ -28,6 +28,7 @@ function bubble_sort($array = [])
     return $array;
 }
 
+// сортировка слиянием
 function merge_sort($array = [])
 {
     if (count($array) <= 1) // возвращаем уже отсортированный массив, если в нем 1 элемент
@@ -36,56 +37,49 @@ function merge_sort($array = [])
     }
     else
     {
-        $left = [];
-        $right = [];
-        $half = count($array) % 2 === 0 ? count($array) / 2 : round(count($array) / 2); // делим пополам
+        list($left, $right) = array_chunk($array, ceil(count($array)/2)); // делим пополам
 
-        for ($i = 0; $i < $half; $i++)
-        {
-            $left[] = $array[$i];
-        }
-
-        for ($j = count($array) - 1; $j >= $half; $j--)
-        {
-            $right[] = $array[$j];
-        }
-
-        $left = merge_sort($left);
-        $right = merge_sort($right);
-
-        $res = merge($left, $right);
-
-        return $res;
+        $left = merge_sort($left); // рекурсивно делим пополам пока не будет 1 элемента
+        $right = merge_sort($right); // рекурсивно делим пополам пока не будет 1 элемента
+        // теперь у нас каждый элемент в отдельном массиве
+        return merge($left, $right); // объединяем, сортируя, в 1 массив
     }
 }
-
 function merge($left, $right)
 {
     $result = [];
-
-    while (count($left) > 0 && count($right) > 0)
+    // если есть 2 массива в которых по 1 значению
+    // - сравниваем и пушим в наш результатирующий массив
+    while (!empty($left) && !empty($right))
     {
-        if (reset($left) <= reset($right))
+        // если значение с из левого массива меньше, чем из правого
+        // - все ок, порядок верный
+        if ($left[0] < $right[0])
         {
-            $result[] = reset($left);
+            $result[] = $left[0];
+            // после добавления элемента в новый массив result
+            // удаляем его из старого
             array_shift($left);
         }
+        // иначе, сначала пушим из правого массива
         else
         {
-            $result[] = reset($right);
+            $result[] = $right[0];
             array_shift($right);
         }
     }
 
-    while (count($left) > 0)
+    // только слева есть
+    while (!empty($left))
     {
-        $result[] = reset($left);
+        $result[] = $left[0];
         array_shift($left);
     }
 
-    while (count($right) > 0)
+    // только справа есть
+    while (!empty($right))
     {
-        $result[] = reset($right);
+        $result[] = $right[0];
         array_shift($right);
     }
 
